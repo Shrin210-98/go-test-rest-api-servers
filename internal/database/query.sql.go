@@ -23,12 +23,7 @@ func (q *Queries) CountAuthors(ctx context.Context) (int64, error) {
 }
 
 const createAuthor = `-- name: CreateAuthor :one
-INSERT INTO authors (
-  name, bio, book_name
-) VALUES (
-  $1, $2, $3
-)
-RETURNING id, name, bio, book_name
+INSERT INTO authors (name, bio, book_name) VALUES ($1, $2, $3) RETURNING id, name, bio, book_name
 `
 
 type CreateAuthorParams struct {
@@ -50,8 +45,7 @@ func (q *Queries) CreateAuthor(ctx context.Context, arg CreateAuthorParams) (Aut
 }
 
 const deleteAuthor = `-- name: DeleteAuthor :exec
-DELETE FROM authors
-WHERE id = $1
+DELETE FROM authors WHERE id = $1
 `
 
 func (q *Queries) DeleteAuthor(ctx context.Context, id int64) error {
@@ -60,8 +54,7 @@ func (q *Queries) DeleteAuthor(ctx context.Context, id int64) error {
 }
 
 const getAuthor = `-- name: GetAuthor :one
-SELECT id, name, bio, book_name FROM authors
-WHERE id = $1 LIMIT 1
+SELECT id, name, bio, book_name FROM authors WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) GetAuthor(ctx context.Context, id int64) (Author, error) {
@@ -77,8 +70,7 @@ func (q *Queries) GetAuthor(ctx context.Context, id int64) (Author, error) {
 }
 
 const listAuthors = `-- name: ListAuthors :many
-SELECT id, name, bio, book_name FROM authors
-ORDER BY name
+SELECT id, name, bio, book_name FROM authors ORDER BY name
 `
 
 func (q *Queries) ListAuthors(ctx context.Context) ([]Author, error) {
@@ -107,10 +99,7 @@ func (q *Queries) ListAuthors(ctx context.Context) ([]Author, error) {
 }
 
 const updateAuthor = `-- name: UpdateAuthor :exec
-UPDATE authors
-  set name = $2,
-  bio = $3
-WHERE id = $1
+UPDATE authors set name = $2, bio = $3 WHERE id = $1
 `
 
 type UpdateAuthorParams struct {

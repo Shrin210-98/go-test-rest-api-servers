@@ -14,6 +14,7 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"example.com/tutorial/internal/database"
+	"example.com/tutorial/internal/handler"
 	"example.com/tutorial/internal/utils"
 )
 
@@ -93,7 +94,10 @@ func NewServer() *http.Server {
 		// 	mux.ServeHTTP(w, r)
 		// 	return
 		// }
-		MiddlewareChain(RequestLoggerMiddleware, RequireAuthMiddleware)(mux).ServeHTTP(w, r)
+		MiddlewareChain(
+			RequestLoggerMiddleware,
+			RequireAuthMiddleware,
+		)(mux).ServeHTTP(w, r)
 	})
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", NewServer.port),
@@ -107,9 +111,12 @@ func NewServer() *http.Server {
 
 func (s *Server) RegisterRoutes() http.Handler {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", s.HelloWorldHandler)
-	mux.HandleFunc("GET    /authors", s.GetAuthorsHandler)
+	// mux.HandleFunc("/", s.HelloWorldHandler)
+	// mux.HandleFunc("GET    /authors", s.GetAuthorsHandler)
 	mux.HandleFunc("DELETE /authors/{id}", s.DeleteAuthorHandler)
+
+	mux.HandleFunc("/", handler.HelloWorld)
+	mux.HandleFunc("GET    /authors", s.GetAuthorsHandler)
 
 	mux.HandleFunc("POST   /register", s.RegisterHandler)
 	mux.HandleFunc("POST   /login", s.LoginHandler)
@@ -247,5 +254,5 @@ func (s *Server) DeleteAuthorHandler(w http.ResponseWriter, r *http.Request) {
 	// }
 	// _, _ = w.Write(jsonResp)
 
-	utils.JsonResponseMsg(w, http.StatusOK, map[string]string{"message": "Successfully Deleted Author"})
+	utils.JsonResponseMsg(w, http.StatusOK, map[string]string{"message": "Successfully Deleted Aaaauthorrrr"})
 }

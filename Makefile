@@ -38,10 +38,12 @@ clean:
 watch:
 	@if command -v air >/dev/null 2>&1; then \
         air; \
+        echo "Watching..."; \
     else \
         echo "Installing air..."; \
         go install github.com/air-verse/air@latest; \
         air; \
+        echo "Watching..."; \
     fi
 # @powershell -ExecutionPolicy Bypass -Command "if (Get-Command air -ErrorAction SilentlyContinue) { \
 		air; \
